@@ -1,1 +1,181 @@
-# finance-kb
+# finance-kb 金融知识图谱
+## 目标
+以上市公司年报为基础信息，构建上市公司的金融知识图谱，强调投资逻辑的构建
+## 主要实体
+1. Company
+
+目前市场上的公司股权类图谱已经很多，我们这里存储简单的信息。
+
+|  属性   | 类型  | 描述 |
+|  ----  | ----  | ---- |
+| name  | string | 公司全名 | 
+|ticker	| string	| 上市公司代码 |
+|short_name |	string	|上市公司简称 |
+| adress	| string	| 注册地址 |
+| scope |	string	|主营范围 |
+| credit_no	| string |	信用代码 |
+
+2. Industry
+
+行业实体，行业分类有很多种，目前市面上的行业分类都比较粗粒度；对于行业的分类越细越有区分度。在量化研究领域，有通过自己实现行业分类来获取超额收益的。
+比如，利用同行业公司的补涨，跟涨等逻辑来构建投资策略等。
+我们希望行业的信息来自公司的 年报或者招股书，相比市场上的分类更加有参考价值。
+
+
+|  属性   | 类型  | 描述 |
+|  ----  | ----  | ---- |
+| name  | string | 行业名称 | 
+|source | string | 分类源:比如申万,自定义 |
+|key_words | string	|行业相关的关键词 |
+
+3. MainBusiness
+
+对应年报中的主营拆分项
+
+|  属性   | 类型  | 描述 |
+|  ----  | ----  | ---- |
+| name  | string | 主营名称 | 
+|classification | string | 拆分标准，比如行业，产品|
+|period_date | string	|报告期 |
+|revenue | double	|营收，单位：亿 |
+|gross_profit | double	|毛利，单位：亿 |
+
+4. Product
+
+主营拆分相对来说还是比较粗粒度，对主营项目拆分到具体的产品，并结合产业链上下游的信息，能够更加准确的做出投资判断
+
+|  属性   | 类型  | 描述 |
+|  ----  | ----  | ---- |
+| name  | string | 产品名称 | 
+|source | string | 产品来源:比如年报，研报，专业机构 |
+|key_words | string	|行业相关的关键词，同义词等 |
+|scope | string	|应用领域 |
+
+5. EmployeeStats
+
+员工统计信息，可以帮助分析公司的人均人效，员工扩展情况。
+
+|  属性   | 类型  | 描述 |
+|  ----  | ----  | ---- |
+| period_date  | string | 报告期 | 
+|total | long | 总人数|
+|research | string	|研发人员 |
+|sales | string	|销售人员 |
+|admin | string	|支持类人员 |
+|bachelor_degree | string	| 本科学历人员 |
+|master_degree | string	|硕士学历及以上 |
+
+
+6. CapacityLogic 产能逻辑
+
+我们认为业绩是驱动公司股价上涨的最核心因素，而 业绩的增长，可以是 卖得多，卖得贵，成本低
+我们从这个模型出发构建相应的逻辑实体。
+
+产能扩张，对于一个公司是重要的信息，以为这未来可卖的产品讲大幅提升，营收讲大幅增长。
+
+|  属性   | 类型  | 描述 |
+|  ----  | ----  | ---- |
+| project_name  | string | 项目名称 | 
+|expected_capacity | string | 目标产能|
+|expected_revenue | string	|目标营收 |
+|investment | double |投资额：亿 |
+|related_product | string	|相关产品 |
+|brief | string	| 简介 |
+|refer | text	|产能扩张的信息来源，比如连接，截图等等 |
+|start_date | string	|开始时间 |
+|end_date | string	|结束时间 |
+
+7. PriceLogic 涨价逻辑
+
+主营产品涨价，将会带来业绩大幅增长，是投资分析中需要重点捕捉的信息。
+
+|  属性   | 类型  | 描述 |
+|  ----  | ----  | ---- |
+| upstream  | string | 上游 | 
+|downstream | string | 下游|
+|reason | string	|原因 |
+|price_circle | string | 价格周期 |
+|capacity_circle | string | 产能周期 |
+|price_trend_now | string	|当前价格趋势 |
+|price_trend_history | string	| 历史趋势 |
+|refer | text	|价格上涨的信息来源，比如连接，截图等等|
+|start_date | string	|开始时间 |
+|end_date | string	|结束时间 |
+
+8. CostLogic 成本控制逻辑
+
+降本增效，可以有效的提高净利润水平
+
+|  属性   | 类型  | 描述 |
+|  ----  | ----  | ---- |
+| total  | long | 总的成本：亿 | 
+|supplier_cost | long | 供应商成本|
+|sales_cost | long	|销售成本 |
+|mgr_cost | long	|管理成本 |
+|fin_cost | long	|财务成本 |
+|rd_cost | long	|研发成本 |
+
+9. RiskLogic 风险逻辑
+
+识别风险，可以有效的规避损失
+
+|  属性   | 类型  | 描述 |
+|  ----  | ----  | ---- |
+| title  | string | 风险简介  | 
+|scope	|string |	财务，供应链，客户，行业等|
+| abstract  | string | 摘要  | 
+| refer| string | 信息来源，比如连接，截图等等  | 
+
+
+10. RDLogic 研发逻辑
+
+对于高新技术企业而言，需要时刻把握主要的研发方向
+
+|  属性   | 类型  | 描述 |
+|  ----  | ----  | ---- |
+| project_name  | string | 研发项目  | 
+|content	|string |	主要内容能够|
+|related_product  | string | 涉及的产品  | 
+|start_date | string	|开始时间 |
+|end_date | string	|结束时间 |
+|impact_est| string	|预估的影响 |
+
+11. IndustryLogic 行业逻辑
+
+对公司涉及行业的一个把握，可以从研报和公司经营评述中获得相关信息
+
+|  属性   | 类型  | 描述 |
+|  ----  | ----  | ---- |
+| total_scale  | long | 行业整体规模  | 
+|competition_struct	|string |	竞争格局|
+|maturity  | string | 行业成熟度  | 
+|key_driver | string	|行业发展主要驱动因素 |
+|CAGR_5 | string	|未来五年复合增长率估计 |
+|demand| string	|需求情况 |
+|supply| string	|供给情况 |
+| refer| string | 信息来源，比如连接，截图等等  | 
+
+12. InvestLogic
+
+相对宏观的投资逻辑，比较主观化，依赖个人经验。
+
+|  属性   | 类型  | 描述 |
+|  ----  | ----  | ---- |
+|logic_tag  | string | 逻辑风格，枚举值，价值投资，技术面，量化，底部反转,etc.  | 
+|detail	|string |	逻辑详情|
+|rise_space  | string | 上涨空间  | 
+|proposal | string	|long/short |
+
+
+13. DataItem
+
+数据节点，对于任何需要以数据挂载来作为辅助分析的，都可以挂载数据节点。
+
+|  属性   | 类型  | 描述 |
+|  ----  | ----  | ---- |
+|name  | string | 数据项名称  | 
+|classification	|string |	分类，比如财务，经营等等|
+|value  | double | 值  |
+ |unit  | string | 单位，枚举  |
+ |yoy  | double | 百分比 |
+ |period_date  | string | 时间|
