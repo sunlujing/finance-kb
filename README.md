@@ -11,9 +11,9 @@
 | name  | string | 公司全名 | 
 |ticker	| string	| 上市公司代码 |
 |short_name |	string	|上市公司简称 |
-| adress	| string	| 注册地址 |
-| scope |	string	|主营范围 |
-| credit_no	| string |	信用代码 |
+| cn_spell	| string	| 拼音简写 |
+| list_date |	string	|上市时间,yyyy-mm-dd |
+| delist_date	| string | 退市时间,yyyy-mm-dd	 |
 
 2. [Industry](#industry)
 
